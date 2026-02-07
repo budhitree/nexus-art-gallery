@@ -1,0 +1,325 @@
+@import 'style.css';
+
+.hero-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.cta-button.outline {
+    background: transparent;
+    border: 1px solid var(--text-primary);
+    color: var(--text-primary);
+}
+
+.cta-button.outline:hover {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+}
+
+/* Immersive Viewer */
+.immersive-viewer {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #080808;
+    /* Dark mode for immersion */
+    z-index: 3000;
+    color: #f0f0f0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    cursor: default;
+    /* Default cursor */
+}
+
+/* Hide UI State */
+.immersive-viewer.hide-ui {
+    cursor: none;
+    /* Hide cursor for full immersion */
+}
+
+.immersive-viewer.active {
+    display: flex;
+    opacity: 1;
+}
+
+.immersive-close {
+    position: absolute;
+    top: 2rem;
+    right: 3rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 0.5rem 1.5rem;
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    /* Smooth fade */
+    z-index: 3100;
+    opacity: 1;
+}
+
+.immersive-close:hover {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
+.immersive-viewer.hide-ui .immersive-close {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.immersive-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem;
+    position: relative;
+}
+
+.immersive-image-container {
+    height: 65vh;
+    margin-bottom: 3rem;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+/* Progress bar for autoplay */
+.autoplay-progress {
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    height: 2px;
+    background: #fff;
+    width: 0%;
+    transition: width 0.1s linear;
+    opacity: 0.5;
+}
+
+#immersive-img {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.immersive-info {
+    text-align: center;
+    max-width: 800px;
+    animation: fadeIn 1s ease 0.5s forwards;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.immersive-viewer.hide-ui .immersive-info {}
+
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.immersive-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: #666;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.immersive-prompt {
+    font-family: 'Space Mono', monospace;
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #ccc;
+    font-weight: 300;
+}
+
+/* Update Control Layout */
+.immersive-controls {
+    position: absolute;
+    bottom: 0;
+    /* Move to very bottom */
+    left: 0;
+    width: 100%;
+    padding-bottom: 3rem;
+    padding-top: 2rem;
+    /* Gradient area */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 1;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    /* distinct bg */
+}
+
+.immersive-viewer.hide-ui .immersive-controls {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+}
+
+.center-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.3s;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1rem;
+}
+
+.nav-btn:hover {
+    color: #fff;
+}
+
+.play-btn {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 0.4rem 1.2rem;
+    font-size: 0.8rem;
+}
+
+.play-btn.playing {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.autoplay-settings {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.timer-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+#autoplay-interval {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #444;
+    color: #fff;
+    width: 40px;
+    text-align: center;
+    font-family: var(--font-sans);
+}
+
+#autoplay-interval:focus {
+    outline: none;
+    border-bottom-color: #fff;
+}
+
+.immersive-counter {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: #444;
+    font-size: 1.2rem;
+}
+
+/* Mobile Responsive For Immersive Mode */
+@media (max-width: 768px) {
+    .immersive-content {
+        padding: 2rem;
+        justify-content: flex-start;
+        padding-top: 5rem;
+        /* Space for close btn */
+    }
+
+    .immersive-image-container {
+        height: 45vh;
+        /* Smaller on mobile */
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    .immersive-prompt {
+        font-size: 0.9rem;
+        max-height: 20vh;
+        overflow-y: auto;
+    }
+
+    .immersive-controls {
+        flex-direction: column-reverse;
+        /* Stack controls */
+        gap: 1.5rem;
+        padding-bottom: 2rem;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent);
+    }
+
+    /* Re-arrange buttons for mobile thumb reach */
+    .immersive-controls>button {
+        /* Prev/Next buttons */
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        width: 44px;
+        /* Larger hit area */
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6rem;
+        z-index: 3200;
+    }
+
+    #prev-art {
+        left: 1rem;
+    }
+
+    #next-art {
+        right: 1rem;
+    }
+
+    .center-controls {
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .immersive-close {
+        top: 1rem;
+        right: 1.5rem;
+        padding: 0.4rem 1rem;
+        background: rgba(0, 0, 0, 0.5);
+        /* Background for visibility over image */
+        border: none;
+    }
+}

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Nexus Art Creator - Create your own AI masterpiece." />
+    <title>Nexus Art | AI 创作</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <nav class="navbar" style="position:absolute; width:100%; top:0; left:0; padding: 2rem 4rem;">
+        <div class="logo"><a href="/" style="text-decoration:none; color:inherit;">NEXUS<span
+                    class="thin">GALLERY</span></a></div>
+        <div class="nav-links">
+            <a href="/" class="nav-item">返回画廊</a>
+        </div>
+    </nav>
+
+    <div id="app" class="create-container">
+        <div class="split-layout">
+            <!-- Workbench Panel -->
+            <div class="workbench-panel">
+                <header class="workbench-header">
+                    <h2>构建你的梦境</h2>
+                    <p>填写以下四个维度，让 AI 为您生成独一无二的艺术作品。</p>
+                </header>
+
+                <div class="prompt-builder">
+                    <!-- Section 1: Subject -->
+                    <div class="input-section">
+                        <label class="section-label">01 / 主体 <span class="label-desc">画面中的核心元素</span></label>
+                        <textarea id="input-subject" class="nexus-input" rows="2"
+                            placeholder="例如：一只戴着宇航员头盔的猫..."></textarea>
+                    </div>
+
+                    <!-- Section 2: Background -->
+                    <div class="input-section">
+                        <label class="section-label">02 / 背景 <span class="label-desc">环境与氛围</span></label>
+                        <textarea id="input-background" class="nexus-input" rows="2"
+                            placeholder="例如：在浩瀚的星云之中，漂浮的岩石..."></textarea>
+                    </div>
+
+                    <!-- Section 3: Style -->
+                    <div class="input-section">
+                        <label class="section-label">03 / 风格 <span class="label-desc">艺术流派与视觉风格</span></label>
+                        <div class="style-selector">
+                            <select id="input-style-preset" class="nexus-select">
+                                <option value="">自定义风格</option>
+                                <option value="Cyberpunk, neon lights, highly detailed, futuristic city">赛博朋克
+                                    (Cyberpunk)</option>
+                                <option value="Oil painting, impressionist, thick brushstrokes, Van Gogh style">印象派油画
+                                    (Impressionism)</option>
+                                <option value="Anime style, Studio Ghibli, vibrant colors, cel shaded">日系动漫 (Anime)
+                                </option>
+                                <option value="Photorealistic, 8k, cinematographic lighting, macro lens">超写实摄影
+                                    (Photorealistic)</option>
+                                <option value="Watercolor, soft edges, pastel colors, dreamy">水彩画 (Watercolor)</option>
+                                <option value="3D render, blender, unreal engine 5, octane render">3D 渲染 (3D Render)
+                                </option>
+                            </select>
+                            <input type="text" id="input-style-custom" class="nexus-input" placeholder="或输入自定义风格描述..."
+                                style="margin-top:0.5rem;">
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Supplement -->
+                    <div class="input-section">
+                        <label class="section-label">04 / 补充 <span class="label-desc">光照、视角、细节修饰</span></label>
+                        <textarea id="input-supplement" class="nexus-input" rows="2"
+                            placeholder="例如：柔和的侧光，微距视角，景深效果，8k分辨率..."></textarea>
+                    </div>
+
+                    <!-- Hidden full prompt for compatibility with existing logic if needed, 
+                     but we will likely build it on the fly in JS -->
+
+                    <div class="generation-controls">
+                        <div class="control-row">
+                            <label>画幅比例</label>
+                            <select id="ai-scale" class="nexus-select small">
+                                <option value="2048x2048">1:1 (正方形)</option>
+                                <option value="2560x1440">16:9 (横屏)</option>
+                                <option value="1440x2560">9:16 (竖屏)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button id="btn-generate" class="nexus-btn primary block">
+                        <span class="icon">✨</span> 开始生成
+                    </button>
+
+                    <div id="status-display" class="status-msg hidden"></div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <div class="preview-container" id="preview-container">
+                    <div class="empty-state">
+                        <div class="placeholder-icon">🎨</div>
+                        <p>生成的作品将展示在这里</p>
+                    </div>
+                    <!-- Images will be injected here -->
+                    <div id="ai-results-wrapper" class="hidden">
+                        <div id="results-grid" class="results-grid-lg"></div>
+                        <div class="action-bar">
+                            <button id="regenerate-btn" class="nexus-btn secondary">重试</button>
+                            <button id="download-selected-btn" class="nexus-btn secondary" disabled>下载</button>
+                            <button id="save-to-gallery-btn" class="nexus-btn primary" disabled>保存到展览</button>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="ai-progress-overlay" class="loading-overlay hidden">
+                        <div class="spinner"></div>
+                        <p>正在编织梦境...</p>
+                        <div class="progress-bar-thin">
+                            <div id="progress-fill" class="fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/create.js"></script>
+</body>
+
+</html>

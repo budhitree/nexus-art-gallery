@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Nexus Art - 展示数字杰作的未来主义 AI 艺术展厅。" />
+  <title>Nexus Art | AI 艺术展厅</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <div class="cursor-dot"></div>
+  <div class="cursor-outline"></div>
+  <div id="app">
+    <nav class="navbar">
+      <div class="logo">NEXUS<span class="thin">GALLERY</span></div>
+      <div class="nav-links">
+        <a href="#" class="nav-item active" data-view="home">展览</a>
+        <a href="#" class="nav-item" data-view="gallery">藏品</a>
+        <a href="#" class="nav-item" data-view="about">参观</a>
+        <a href="/create.html" class="nav-create-btn">AI创作</a>
+        <button id="nav-upload-btn" class="nav-create-btn" style="display:none;">上传作品</button>
+        <button id="nav-user-btn" class="auth-btn">用户</button>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <!-- View: Home -->
+      <div id="view-home" class="view-section active">
+        <header id="hero" class="hero-section">
+          <div class="hero-bg"></div>
+          <div class="hero-content">
+            <p class="hero-subtitle">精选数字杰作</p>
+            <h1 class="hero-title">未来梦境<br>之艺术</h1>
+            <div class="hero-actions">
+              <button class="cta-button nav-trigger" data-target="gallery">浏览藏品</button>
+              <button id="start-immersive" class="cta-button outline">沉浸模式</button>
+            </div>
+          </div>
+        </header>
+      </div>
+
+      <!-- View: Gallery -->
+      <div id="view-gallery" class="view-section" style="display:none;">
+        <section id="gallery" class="gallery-section">
+          <div class="section-header">
+            <h2 class="section-title">当前展览</h2>
+            <p class="section-desc">探索合成想象力边界的精选作品。</p>
+          </div>
+
+          <!-- 搜索和筛选控制 -->
+          <div class="gallery-controls">
+            <div class="search-box">
+              <input type="text" id="search-input" placeholder="搜索提示词 (Prompt)..." />
+              <span class="search-icon">🔍</span>
+            </div>
+
+            <!-- 管理员筛选控制 (仅 admin 可见) -->
+            <div id="admin-filters" class="admin-filters hidden">
+              <select id="filter-by-student" class="filter-select">
+                <option value="">所有学生</option>
+              </select>
+              <button id="clear-filters" class="clear-btn">清除筛选</button>
+            </div>
+          </div>
+
+          <div class="gallery-grid" id="gallery-grid">
+            <!-- Gallery items will be injected here by JS -->
+          </div>
+        </section>
+      </div>
+
+      <!-- View: About -->
+      <div id="view-about" class="view-section" style="display:none;">
+        <section id="about" class="about-section">
+          <div class="section-header">
+            <h2 class="section-title">关于 NEXUS</h2>
+            <p class="section-desc">数字艺术与人工智能的交汇点</p>
+          </div>
+          <div class="about-content">
+            <div class="about-text-block">
+              <p>Nexus Art 是一个致力于展示人工智能生成的数字艺术的实验性空间。我们相信，在算法的冰冷逻辑与人类情感的温热之间，存在着一种全新的美学语言。</p>
+              <p>每一件展品都是通过精密的 prompt engineering 与先进的生成模型协作完成，探索着机器想象力的边界。在这里，我们不仅仅观看艺术，更是在见证一种新思维方式的诞生。</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2026 Nexus Art Gallery. Powered by Antigravity.</p>
+    </footer>
+
+    <!-- Image Modal -->
+    <div id="modal" class="modal">
+      <button class="close-modal">&times; 关闭</button>
+      <div class="modal-inner">
+        <div class="modal-image-wrapper">
+          <img id="modal-image" src="" alt="Artwork Detail">
+        </div>
+        <div class="modal-text">
+          <h3 id="modal-title">Artwork Title</h3>
+          <p id="modal-desc">Description goes here.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Immersive Mode Overlay -->
+    <div id="immersive-viewer" class="immersive-viewer">
+      <button class="immersive-close">&times; 退出</button>
+
+      <div class="immersive-content">
+        <div class="immersive-image-container">
+          <img id="immersive-img" src="" alt="Immersive Art">
+        </div>
+        <div class="immersive-info">
+          <span class="immersive-label">AI 提示词</span>
+          <p id="immersive-prompt" class="immersive-prompt">...</p>
+        </div>
+      </div>
+
+      <div class="immersive-controls">
+        <button id="prev-art" class="nav-btn">上一个</button>
+
+        <div class="center-controls">
+          <div class="autoplay-settings">
+            <button id="toggle-play" class="nav-btn play-btn">▶ 播放</button>
+            <div class="timer-input-wrapper">
+              <input type="number" id="autoplay-interval" value="5" min="2" max="60">
+              <span>秒</span>
+            </div>
+          </div>
+          <div class="immersive-counter">
+            <span id="current-index">1</span> / <span id="total-count">6</span>
+          </div>
+        </div>
+
+        <button id="next-art" class="nav-btn">下一个</button>
+      </div>
+    </div>
+    <!-- Auth Modal (Login/Register) -->
+    <div id="auth-modal" class="upload-modal">
+      <div class="upload-container">
+        <button class="close-auth">&times;</button>
+
+        <div class="upload-tab-nav">
+          <button class="tab-btn active" data-tab="login">登录</button>
+          <button class="tab-btn" data-tab="register">注册</button>
+        </div>
+
+        <!-- Login View -->
+        <div id="tab-login" class="tab-content">
+          <h3 style="margin-bottom:1rem; font-family:var(--font-serif)">登录</h3>
+          <p style="margin-bottom:2rem; color:#666; font-size:0.9rem">
+            输入您的学号/工号和密码登录系统
+          </p>
+
+          <div class="form-group">
+            <label class="form-label">学号/工号</label>
+            <input type="text" id="login-id" class="form-input" placeholder="学生：20250101 / 教师：2506049 / 管理员：admin">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">密码</label>
+            <input type="password" id="login-password" class="form-input" placeholder="默认密码：123456">
+          </div>
+
+          <button id="do-login-btn" class="submit-btn">登录</button>
+
+          <p style="text-align:center; margin-top:1.5rem; color:#666; font-size:0.9rem;">
+            还没有账号？<a href="#" id="goto-register" style="color:var(--text-primary); text-decoration:underline;">立即注册</a>
+          </p>
+        </div>
+
+        <!-- Register View -->
+        <div id="tab-register" class="tab-content hidden">
+          <h3 style="margin-bottom:1rem; font-family:var(--font-serif)">注册账号</h3>
+          <p style="margin-bottom:2rem; color:#666; font-size:0.9rem">
+            创建新账号以使用系统功能
+          </p>
+
+          <div class="form-group">
+            <label class="form-label">用户类型</label>
+            <select id="register-type" class="form-input">
+              <option value="student">学生</option>
+              <option value="teacher">教师</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" id="register-id-label">学号（8位数字）</label>
+            <input type="text" id="register-id" class="form-input" placeholder="例如：20250101">
+            <small style="color:#888; font-size:0.85rem; display:block; margin-top:0.5rem;">
+              格式：年级(4位)+班级(2位)+学号(2位)
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">姓名</label>
+            <input type="text" id="register-name" class="form-input" placeholder="请输入真实姓名">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">密码</label>
+            <input type="password" id="register-password" class="form-input" placeholder="设置登录密码（至少6位）">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">确认密码</label>
+            <input type="password" id="register-password-confirm" class="form-input" placeholder="再次输入密码">
+          </div>
+
+          <button id="do-register-btn" class="submit-btn">注册</button>
+
+          <p style="text-align:center; margin-top:1.5rem; color:#666; font-size:0.9rem;">
+            已有账号？<a href="#" id="goto-login-from-register"
+              style="color:var(--text-primary); text-decoration:underline;">立即登录</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="upload-modal">
+      <div class="upload-container">
+        <button class="close-upload">&times;</button>
+
+        <h3 style="margin-bottom:2rem; font-family:var(--font-serif)">上传作品</h3>
+
+        <form id="upload-form">
+          <div class="form-group">
+            <label class="form-label">图片文件</label>
+            <input type="file" id="art-file" accept="image/*" class="hidden">
+            <div class="file-drop-area" id="drop-area">
+              <span class="file-msg">点击或拖拽图片到此处</span>
+              <img id="preview-img" style="max-height:100px; display:none; margin: 1rem auto; display:block;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">标题</label>
+            <input type="text" id="art-title" class="form-input" required placeholder="为您的杰作命名">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">AI 提示词</label>
+            <textarea id="art-prompt" class="form-textarea" required placeholder="描述用于生成的提示词..."></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submit-art-btn">提交到展览</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="upload-modal">
+      <div class="upload-container">
+        <button class="close-profile">&times;</button>
+
+        <h3 style="margin-bottom:2rem; font-family:var(--font-serif)">个人中心</h3>
+
+        <div class="profile-info" style="background:#f5f5f5; padding:1.5rem; border-radius:8px; margin-bottom:2rem;">
+          <p style="margin:0.5rem 0;"><strong>账号：</strong><span id="profile-id">-</span></p>
+          <p style="margin:0.5rem 0;"><strong>姓名：</strong><span id="profile-name">-</span></p>
+          <p style="margin:0.5rem 0;"><strong>类型：</strong><span id="profile-type">-</span></p>
+          <p style="margin:0.5rem 0;"><strong>加入时间：</strong><span id="profile-joined">-</span></p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">修改姓名</label>
+          <input type="text" id="profile-new-name" class="form-input" placeholder="输入新姓名">
+          <button id="update-name-btn" class="submit-btn" style="margin-top:0.5rem;">
+            更新姓名
+          </button>
+        </div>
+
+        <hr style="margin:2rem 0; border:none; border-top:1px solid #eee;">
+
+        <h4 style="margin-bottom:1rem; font-size:1rem;">修改密码</h4>
+
+        <div class="form-group">
+          <label class="form-label">当前密码</label>
+          <input type="password" id="profile-old-password" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">新密码</label>
+          <input type="password" id="profile-new-password" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">确认新密码</label>
+          <input type="password" id="profile-new-password-confirm" class="form-input">
+        </div>
+
+        <button id="update-password-btn" class="submit-btn">更新密码</button>
+
+        <hr style="margin:2rem 0; border:none; border-top:1px solid #eee;">
+
+        <button id="logout-btn" class="submit-btn" style="background:#666;">
+          退出登录
+        </button>
+      </div>
+    </div>
+      <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+.about-section {
+    padding: 8rem 4rem;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.about-content {
+    display: flex;
+    justify-content: center;
+}
+
+.about-text-block {
+    max-width: 800px;
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    line-height: 2;
+    color: var(--text-secondary);
+}
+
+.about-text-block p {
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .about-section {
+        padding: 6rem 2rem;
+    }
+}

@@ -1,0 +1,389 @@
+:root {
+    --bg-panel: #ffffff;
+    --bg-preview: #f0f0f0;
+    --border-color: rgba(0, 0, 0, 0.08);
+    --input-bg: #f8f8f8;
+    --primary: #1a1a1a;
+    --accent-blue: #2d5af5;
+}
+
+body {
+    overflow: hidden;
+    /* App-like feel */
+}
+
+.create-container {
+    height: 100vh;
+    width: 100vw;
+    padding-top: 80px;
+    /* Navbar space */
+    background: var(--bg-primary);
+}
+
+.split-layout {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+/* Workbench (Left) */
+.workbench-panel {
+    width: 450px;
+    flex-shrink: 0;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border-color);
+    padding: 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.workbench-header {
+    margin-bottom: 2rem;
+}
+
+.workbench-header h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.workbench-header p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.input-section {
+    margin-bottom: 1.5rem;
+    background: #fff;
+}
+
+.section-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.8rem;
+    color: var(--text-primary);
+}
+
+.label-desc {
+    font-weight: 400;
+    color: var(--text-secondary);
+    text-transform: none;
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.nexus-input,
+.nexus-select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: var(--input-bg);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    resize: none;
+}
+
+.nexus-input:focus,
+.nexus-select:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.style-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nexus-btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.nexus-btn.primary {
+    background: var(--primary);
+    color: #fff;
+}
+
+.nexus-btn.primary:hover {
+    background: #000;
+    transform: translateY(-1px);
+}
+
+.nexus-btn.primary:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.nexus-btn.secondary {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.nexus-btn.secondary:hover {
+    border-color: var(--primary);
+    background: #fff;
+}
+
+.nexus-btn.block {
+    width: 100%;
+}
+
+.generation-controls {
+    margin: 1rem 0 2rem 0;
+    padding: 1rem;
+    background: var(--input-bg);
+    border-radius: 8px;
+}
+
+.status-msg {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.status-msg.info {
+    background: #e8f4fd;
+    color: #0c5460;
+}
+
+.status-msg.error {
+    background: #fde8e8;
+    color: #c02b2b;
+}
+
+.status-msg.hidden {
+    display: none;
+}
+
+/* Preview Panel (Right) */
+.preview-panel {
+    flex: 1;
+    background: var(--bg-preview);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 2rem;
+    overflow-y: auto; /* 添加滚动 */
+}
+
+.preview-container {
+    width: 100%;
+    max-width: 1000px;
+    min-height: 100%; /* 改为 min-height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* 改为 flex-start */
+    border-radius: 12px;
+    position: relative;
+    padding: 2rem 0; /* 添加上下内边距 */
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.placeholder-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.2;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: 12px;
+}
+
+.loading-overlay.hidden {
+    display: none;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.progress-bar-thin {
+    width: 200px;
+    height: 4px;
+    background: #eee;
+    margin-top: 1rem;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar-thin .fill {
+    width: 0%;
+    height: 100%;
+    background: var(--primary);
+    transition: width 0.3s;
+}
+
+/* Prompt Chips */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.prompt-chip {
+    background: #f0f2f5;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.prompt-chip:hover {
+    background: #e4e6eb;
+    color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.prompt-chip.history {
+    background: #e8f4fd;
+    color: var(--accent-blue);
+    border-color: rgba(45, 90, 245, 0.2);
+}
+
+.prompt-chip.history:hover {
+    background: #d0e8fc;
+}
+
+/* Results Grid */
+.results-grid-lg {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 900px; /* 限制最大宽度 */
+    justify-content: center;
+    margin-bottom: 1rem; /* 确保底部有空间 */
+}
+
+.result-item {
+    aspect-ratio: 1;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s;
+    max-height: 400px; /* 限制最大高度 */
+}
+
+.result-item:hover {
+    transform: translateY(-5px);
+}
+
+.result-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 改为 contain 以完整显示图片 */
+    background: #f5f5f5; /* 添加背景色 */
+}
+
+.result-item.selected {
+    box-shadow: 0 0 0 4px var(--accent-blue);
+}
+
+.action-bar {
+    margin-top: 2rem;
+    margin-bottom: 2rem; /* 添加底部边距 */
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap; /* 允许换行 */
+}
+
+@media (max-width: 900px) {
+    .split-layout {
+        flex-direction: column;
+        overflow-y: auto;
+        /* Enable scroll on container if needed, but body has it */
+    }
+
+    .workbench-panel {
+        width: 100%;
+        max-height: none;
+        /* Let it expand naturally */
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1.5rem;
+    }
+
+    .preview-panel {
+        padding: 1rem;
+        min-height: 50vh;
+        /* Ensure preview has space */
+    }
+
+    .create-container {
+        padding-top: 60px;
+        overflow-y: auto;
+        /* Allow full page scroll */
+        height: auto;
+        min-height: 100vh;
+    }
+
+    /* Navbar fix for mobile create page */
+    .navbar {
+        padding: 1rem 1.5rem !important;
+        background: rgba(255, 255, 255, 0.95);
+    }
+}
