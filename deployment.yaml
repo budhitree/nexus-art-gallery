@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus-art-gallery
+  labels:
+    app: nexus-art-gallery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nexus-art-gallery
+  template:
+    metadata:
+      labels:
+        app: nexus-art-gallery
+    spec:
+      containers:
+      - name: nexus-art-gallery
+        # Sealos 会自动从 GitHub 构建镜像，或者使用以下镜像地址
+        image: ghcr.io/budhitree/nexus-art-gallery:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3000"
+        - name: VOLC_API_KEY
+          value: "你的火山引擎API密钥"  # 请替换为实际的 API 密钥
+        - name: VOLC_SEEDREAM_ENDPOINT
+          value: "你的Seedream端点ID"  # 请替换为实际的端点 ID
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        volumeMounts:
+        - name: uploads
+          mountPath: /app/public/uploads
+        - name: database
+          mountPath: /app/data
+        livenessProbe:
+          httpGet:
+            path: /api/gallery
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/gallery
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: nexus-uploads-pvc
+      - name: database
+        persistentVolumeClaim:
+          claimName: nexus-database-pvc
